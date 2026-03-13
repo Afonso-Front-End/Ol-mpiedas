@@ -1,0 +1,302 @@
+/* =========================================
+   1. RESET BÁSICO
+========================================= */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #121212;
+    color: white;
+    margin: 0;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Rigorosamente 100% da altura da tela */
+    width: 100vw;
+    overflow: hidden; /* Nada de scroll na página inteira */
+}
+
+@media (min-width: 640px) {
+    body {
+        padding: 2rem;
+    }
+}
+
+/* =========================================
+   2. ESTRUTURA PRINCIPAL E LUZES
+========================================= */
+.bg-jt-gradient {
+    background: linear-gradient(135deg, #E3000F 0%, #a8000b 50%, #4a0004 100%);
+}
+
+.app-container {
+    position: relative;
+    width: 100%;
+    height: 100%; /* Preenche todo o espaço do body (respeitando o padding) */
+    max-width: 1280px;
+    border-radius: 2rem;
+    box-shadow: 0 20px 50px rgba(227, 0, 15, 0.4);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: clamp(1rem, 3vh, 1.5rem) clamp(1rem, 4vw, 3rem); /* Padding dinâmico */
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.decor-lights {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.light-top {
+    position: absolute;
+    top: -20%; right: 10%;
+    width: 50%; height: 60%;
+    background-color: white; opacity: 0.1;
+    border-radius: 50%; filter: blur(100px);
+}
+
+.light-bottom {
+    position: absolute;
+    bottom: -10%; left: -10%;
+    width: 50%; height: 60%;
+    background-color: black; opacity: 0.4;
+    border-radius: 50%; filter: blur(100px);
+}
+
+/* =========================================
+   3. CABEÇALHO (HEADER) E TEXTOS
+========================================= */
+.app-header {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-bottom: clamp(0.5rem, 2vh, 1rem); /* Margem se adapta à altura */
+}
+
+.regional-badge {
+    display: flex; align-items: center; gap: 0.5rem;
+    background-color: white; color: #E3000F;
+    padding: 0.375rem 1.25rem; border-radius: 9999px;
+    font-weight: bold; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    margin-bottom: clamp(0.25rem, 1vh, 0.75rem);
+    font-size: clamp(0.75rem, 1.5vh, 0.875rem);
+}
+
+.icon-sm { width: 1rem; height: 1rem; }
+
+.title-group {
+    display: flex; align-items: center; justify-content: center; gap: 1.5rem;
+    width: 100%; position: relative;
+}
+
+.sparkle-left, .sparkle-right {
+    position: absolute; color: #fde047; opacity: 0.8; display: none;
+}
+
+.sparkle-left { top: 0.25rem; left: 22%; width: 1.5rem; height: 1.5rem; }
+.sparkle-right { bottom: 0.25rem; right: 22%; width: 1.25rem; height: 1.25rem; }
+
+@media (min-width: 768px) {
+    .sparkle-left, .sparkle-right { display: block; }
+}
+
+.icon-trophy {
+    width: clamp(2rem, 6vh, 4rem); /* Troféu cresce ou diminui com a altura da tela */
+    height: clamp(2rem, 6vh, 4rem);
+    color: #facc15; fill: rgba(234, 179, 8, 0.2);
+}
+
+.trophy-glow { filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.6)); }
+
+.main-title {
+    font-size: clamp(1.5rem, 4.5vh, 3rem); /* Fonte perfeitamente adaptável */
+    font-weight: 900; text-align: center; text-transform: uppercase;
+    letter-spacing: -0.05em; line-height: 1; color: white;
+    filter: drop-shadow(0 20px 13px rgba(0, 0, 0, 0.03));
+    margin: 0;
+}
+
+.gold-text {
+    background: linear-gradient(to right, #FDE047, #F59E0B, #FDE047);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; background-size: 200% auto;
+    animation: textShine 4s linear infinite;
+}
+
+.gold-text-block {
+    font-size: clamp(1.2rem, 3.5vh, 2.25rem); /* Subtítulo adaptável */
+    margin-top: clamp(0.1rem, 1vh, 0.5rem);
+    display: block;
+}
+
+.header-subtitle {
+    text-align: center;
+    font-size: clamp(0.9rem, 2vh, 1.125rem);
+    font-weight: 500;
+    margin-top: clamp(0.25rem, 1.5vh, 0.75rem);
+    color: #fef2f2;
+}
+
+.highlight-fase {
+    color: #facc15; font-weight: bold;
+    border-bottom: 2px solid rgba(250, 204, 21, 0.5); padding-bottom: 0.125rem;
+}
+
+/* =========================================
+   4. GRID E CARDS DE COLABORADORES
+========================================= */
+.colab-grid {
+    position: relative; z-index: 10; width: 100%;
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(0.75rem, 2vw, 1.5rem);
+    row-gap: clamp(0.5rem, 1.5vh, 0.75rem); /* O gap respira com a altura da tela */
+    flex: 1; /* Preenche todo o meio disponível */
+    min-height: 0; /* IMPRESCINDÍVEL: Impede que o grid quebre o tamanho do container */
+    align-content: center;
+    overflow-y: auto; /* Fallback: Se a tela for absurdamente pequena, ativa um scroll interno só aqui */
+    padding-right: 0.5rem;
+}
+
+/* Scrollbar customizada e fininha só para o grid (caso precise) */
+.colab-grid::-webkit-scrollbar { width: 4px; }
+.colab-grid::-webkit-scrollbar-track { background: transparent; }
+.colab-grid::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease; border-radius: 0.75rem;
+    padding: clamp(0.4rem, 1.5vh, 0.75rem) clamp(0.75rem, 2vw, 1.25rem);
+    display: flex; align-items: center; gap: clamp(0.5rem, 1vw, 0.75rem); width: 100%;
+}
+
+.clickable-card { cursor: pointer; }
+.clickable-card:hover {
+    background: rgba(255, 255, 255, 0.12); transform: translateY(-2px);
+    border-color: #FDE047; box-shadow: 0 4px 20px rgba(250, 204, 21, 0.3);
+}
+
+.avatar-icon-bg {
+    background: linear-gradient(to bottom right, #fde047, #eab308);
+    color: #7f1d1d; 
+    width: clamp(2rem, 4.5vh, 2.5rem); 
+    height: clamp(2rem, 4.5vh, 2.5rem);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(254, 240, 138, 0.5);
+}
+
+.avatar-star { width: 1.25rem; height: 1.25rem; fill: #7f1d1d; transition: transform 0.3s; }
+.clickable-card:hover .avatar-star { transform: scale(1.1); }
+
+.colab-info { flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+.colab-name {
+    font-weight: bold; font-size: clamp(0.85rem, 2vh, 1.05rem);
+    color: white; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; margin: 0;
+}
+
+.colab-role {
+    font-size: clamp(0.65rem, 1.5vh, 0.8rem);
+    color: #fecaca; margin-top: 0.125rem; display: flex; align-items: center;
+    gap: 0.375rem; font-weight: 500; overflow: hidden; text-overflow: ellipsis; margin-bottom: 0;
+}
+
+.icon-xs { width: 0.75rem; height: 0.75rem; opacity: 0.7; }
+.opacity-60 { opacity: 0.6; }
+
+/* =========================================
+   5. RODAPÉ E BOTÃO GOLD
+========================================= */
+.app-footer {
+    position: relative; z-index: 10;
+    margin-top: clamp(0.5rem, 2vh, 1rem); /* Margem encolhe em telas curtas */
+    display: flex; justify-content: center;
+}
+
+.btn-gold {
+    background: linear-gradient(to right, #F59E0B, #FDE047, #F59E0B); background-size: 200% auto;
+    animation: textShine 3s linear infinite; color: #450a0a; box-shadow: 0 0 20px rgba(250, 204, 21, 0.3);
+    font-weight: 900; text-transform: uppercase; letter-spacing: 0.2em;
+    padding: clamp(0.6rem, 1.5vh, 0.75rem) clamp(1.5rem, 4vw, 3rem);
+    border-radius: 9999px; font-size: clamp(0.75rem, 1.8vh, 1rem);
+    display: flex; align-items: center; gap: 0.75rem; cursor: default;
+}
+
+.icon-btn { width: 1.25rem; height: 1.25rem; }
+
+/* =========================================
+   6. MODAL DA FOTO
+========================================= */
+.modal-overlay {
+    position: fixed; inset: 0; z-index: 50; display: none;
+    align-items: center; justify-content: center;
+    background-color: rgba(0, 0, 0, 0.8); backdrop-filter: blur(4px); transition: opacity 0.3s;
+}
+.modal-overlay.is-active { display: flex; }
+
+.modal-box {
+    position: relative; width: 100%; max-width: 28rem;
+    background-color: #171717; border-radius: 1rem; padding: 0.75rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(239, 68, 68, 0.5); margin: 0 1rem;
+    animation: fadeIn 0.2s ease-out forwards;
+}
+
+.modal-close {
+    position: absolute; top: -1rem; right: -1rem; background-color: #E3000F;
+    color: white; border-radius: 50%; padding: 0.625rem; transition: all 0.3s;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); z-index: 20; border: 2px solid #171717;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.modal-close:hover { background-color: #b91c1c; transform: scale(1.1); }
+.modal-close svg { width: 1.25rem; height: 1.25rem; }
+
+.modal-img-wrapper {
+    overflow: hidden; border-radius: 0.75rem; background-color: black;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border: 1px solid #404040; position: relative; min-height: 350px;
+}
+.modal-img {
+    width: 100%; height: auto; object-fit: cover; max-height: 65vh; z-index: 10; display: block;
+}
+
+.modal-error {
+    position: absolute; inset: 0; display: none; flex-direction: column;
+    align-items: center; justify-content: center; padding: 2rem;
+    text-align: center; z-index: 0; background-color: #262626;
+}
+.modal-error.is-active { display: flex; }
+.modal-error svg { width: 3rem; height: 3rem; color: #eab308; margin-bottom: 1rem; opacity: 0.7; }
+.modal-error h4 { color: white; font-weight: bold; margin-bottom: 0.5rem; font-size: 1.125rem; margin-top: 0; }
+.modal-error p { font-size: 0.875rem; color: #d4d4d4; line-height: 1.625; margin: 0; }
+.modal-error strong { color: #facc15; word-break: break-all; }
+
+.modal-info-box { text-align: center; margin-top: 1rem; margin-bottom: 0.5rem; }
+.modal-name-row { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.25rem; }
+.modal-name-row svg { width: 1.25rem; height: 1.25rem; color: #facc15; }
+.modal-name { color: white; font-weight: bold; font-size: 1.25rem; text-transform: uppercase; letter-spacing: 0.05em; margin: 0; }
+.modal-subtitle { color: #fca5a5; font-size: 0.875rem; font-weight: 500; margin: 0; }
+
+/* =========================================
+   7. ANIMAÇÕES
+========================================= */
+@keyframes textShine { to { background-position: 200% center; } }
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
