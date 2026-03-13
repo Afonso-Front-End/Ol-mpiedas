@@ -39,7 +39,7 @@ body {
 .app-container {
     position: relative;
     width: 100%;
-    height: 100%;
+    /* height: 100%; */
     /* Preenche todo o espaço do body (respeitando o padding) */
     max-width: 1280px;
     border-radius: 2rem;
