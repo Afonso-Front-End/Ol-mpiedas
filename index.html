@@ -47,18 +47,17 @@
             </section>
 
         <footer class="app-footer">
-            <div class="btn-gold">
-                <i data-lucide="award" class="icon-btn"></i>
+            <button onclick="openGalleryModal()" class="btn-gold">
+                <i data-lucide="images" class="icon-btn"></i>
                 Competindo com excelência
-                <i data-lucide="award" class="icon-btn"></i>
-            </div>
+                <i data-lucide="images" class="icon-btn"></i>
+            </button>
         </footer>
 
     </main>
 
     <div id="photo-modal" class="modal-overlay" onclick="closeModal()">
         <div class="modal-box" onclick="event.stopPropagation()">
-            
             <button onclick="closeModal()" class="modal-close">
                 <i data-lucide="x"></i>
             </button>
@@ -69,9 +68,7 @@
                 <div id="img-error-msg" class="modal-error">
                     <i data-lucide="image-off"></i>
                     <h4>Foto não encontrada!</h4>
-                    <p id="error-desc">
-                        O sistema procurou o arquivo, mas não encontrou.
-                    </p>
+                    <p id="error-desc">O sistema procurou o arquivo, mas não encontrou.</p>
                 </div>
             </div>
             
@@ -83,6 +80,21 @@
                 </div>
                 <p class="modal-subtitle">Bipagem (Criação de lote)</p>
             </div>
+        </div>
+    </div>
+
+    <div id="gallery-modal" class="modal-overlay" onclick="closeGalleryModal()">
+        <div class="gallery-box" onclick="event.stopPropagation()">
+            <button onclick="closeGalleryModal()" class="modal-close">
+                <i data-lucide="x"></i>
+            </button>
+            
+            <div class="gallery-header">
+                <h2 class="gallery-title">Galeria de Classificados</h2>
+                <p class="gallery-subtitle">Todos os participantes da 1ª Fase</p>
+            </div>
+            
+            <div class="gallery-content" id="gallery-content"></div>
         </div>
     </div>
 
@@ -103,6 +115,7 @@
             ]
         };
 
+        // Renderiza os nomes na tela inicial
         document.addEventListener('DOMContentLoaded', () => {
             const grid = document.getElementById('grid-colaboradores');
             let conteudoHTML = '';
@@ -129,6 +142,9 @@
             lucide.createIcons();
         });
 
+        // =========================================
+        // FUNÇÕES DO MODAL INDIVIDUAL
+        // =========================================
         function openModal(imageSrc, name) {
             const modal = document.getElementById('photo-modal');
             const imgEl = document.getElementById('modal-img');
@@ -141,7 +157,6 @@
 
             imgEl.src = imageSrc;
             nameEl.textContent = name;
-            
             errorDesc.innerHTML = `Tentamos abrir a imagem na pasta:<br> <strong>${imageSrc}</strong><br><br>Coloque a foto com este nome exato dentro da pasta "fotos".`;
 
             modal.classList.add('is-active');
@@ -158,9 +173,57 @@
             modal.classList.remove('is-active');
             setTimeout(() => { document.getElementById('modal-img').src = ''; }, 300);
         }
+
+        // =========================================
+        // FUNÇÕES DO MODAL DE GALERIA COMPLETA
+        // =========================================
+        function openGalleryModal() {
+            const modal = document.getElementById('gallery-modal');
+            const content = document.getElementById('gallery-content');
+            
+            let html = '';
+            configuracao.colaboradores.forEach(colab => {
+                const imageSrc = configuracao.pastaFotos + colab.arquivoFoto;
+                
+                html += `
+                <div class="gallery-card">
+                    <div class="gallery-card-img-wrapper">
+                        <div class="gallery-card-img">
+                            <img src="${imageSrc}" alt="${colab.nome}" class="gallery-card-img" onerror="handleGalleryError(this)">
+                        </div>
+                        <div class="gallery-card-error" style="display:none;">
+                            <i data-lucide="image-off" style="width: 2rem; height: 2rem; opacity: 0.5;"></i>
+                        </div>
+                    </div>
+                    <div class="gallery-card-info">
+                        <h4 class="gallery-card-name" title="${colab.nome}">${colab.nome}</h4>
+                        <p class="gallery-card-role">Bipagem (Lote)</p>
+                    </div>
+                </div>
+                `;
+            });
+            
+            content.innerHTML = html;
+            lucide.createIcons(); // Recarrega os ícones dentro da galeria
+            modal.classList.add('is-active');
+        }
+
+        function handleGalleryError(imgElement) {
+            imgElement.style.display = 'none';
+            imgElement.nextElementSibling.style.display = 'flex';
+        }
+
+        function closeGalleryModal() {
+            const modal = document.getElementById('gallery-modal');
+            modal.classList.remove('is-active');
+        }
         
+        // Fechar qualquer modal apertando ESC
         document.addEventListener('keydown', function(event) {
-            if (event.key === "Escape") closeModal();
+            if (event.key === "Escape") {
+                closeModal();
+                closeGalleryModal();
+            }
         });
     </script>
 </body>
