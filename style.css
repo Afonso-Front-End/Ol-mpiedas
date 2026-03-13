@@ -226,6 +226,7 @@ body {
     row-gap: clamp(0.5rem, 1.5vh, 0.75rem);
     /* O gap respira com a altura da tela */
     flex: 1;
+    padding: 0.5rem 0;
     /* Preenche todo o meio disponível */
     min-height: 0;
     /* IMPRESCINDÍVEL: Impede que o grid quebre o tamanho do container */
